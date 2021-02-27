@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Duc's Likes - Instagram Likes + </title>
+    <link rel="stylesheet" href="interface.css">
+    <script src="interface.js"></script>
+  </head>
+
+  <body>
+  <div class="modal-wormhole visible send-invite ember-view" id="ember">
+    <div aria-labelledby="ember-modal-label" class="modal-wormhole-content" role="dialog" tabindex="-1" style="min-width: 300px;">
+      <div class="left-rail-facets">
+        <section class="sticky">
+          <div class="modal-content-wrapper">
+            <div class="search-types-container">
+                <ul class="search-types-list">
+                    <li tab="automation-tab" class="category-type selected"><a href="#" class="category-type-link">Duke's Likes</a></li>
+                    <li tab="progress-tab" class="category-type" style="display: none;"><a href="#" class="category-type-link">Duke's Likes</a></li>
+                </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="automation-tab" class="modal-content-wrapper" style="padding: 1px 5px 1px 5px; display: none;">
+        <section class="modal">
+          <div style="height: 100%; display: none;">
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="padding: 5px 0px; margin-bottom: 10px;">List Type</h2>
+            <button class="button-secondary-large-muted ml3 automation-settings" style="padding: 0 30px;">Links</button>
+            <button class="button-secondary-large-muted ml3 automation-settings" style="padding: 0 10px; margin-left: 0px;">Usernames</button>
+          </div>
+          <div style="width: 95%; padding: 5px; margin: 0px 5px 5px 0px; background-color: #DF2828; border-radius: 2px;">
+            <p style="color: #FFF;">Notice: Được dịch từ tiếng Anh-Dude là tiếng lóng tiếng Anh Mỹ cho một cá nhân, điển hình là nam giới. Từ những năm 1870 đến những năm 1960</p>
+          </div>
+          <div style="height: 100%; margin: 0px 5px;">
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="margin-bottom: 5px;"><b>List</b></h2>
+            <p id="ember-modal-label"><label for="custom-message"><b>Links or usernames</b></label></p>
+            <p id="ember-modal-label"><label for="custom-message">Important: please set your language on Instagram to English while using the extension if it is not liking, here is a <a href="https://help.instagram.com/111923612310997" target="_blank">tutorial</a></label></p>
+            <div class="ph4">
+                <textarea class="send-invite__custom-message mb3 ember-text-area ember-view save_template_field automation-settings" id="list" name="message" placeholder="One entry per line" style="height: 62px; resize: vertical;"></textarea>
+            </div>
+          </div>
+          <div style="height: 100%; margin: 0px 5px;">
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="padding: 5px 0px; margin-bottom: 0px;"><b>Interval</b></h2>
+            <p id="ember-modal-label"><label for="custom-message"><b>Time between likes</b></label></p>
+            <div class="ph4" id="interval" style="margin-top: 10px;">
+               <input name="interval-min" id="interval-min" class="automation-settings medium-input ember-checkbox ember-view" type="text" style="width: 46px; height: 30px; display: inline-block; vertical-align: middle;"> to 
+               <input name="interval-max" id="interval-max" class="automation-settings medium-input ember-checkbox ember-view" type="text" style="width: 46px; height: 30px; display: inline-block; vertical-align: middle;"> seconds
+            </div>
+            <div id="starttrue">
+              <button class="button-primary-large ml3" id="start" style="padding: 0 36px; margin: 10px 1px 10px 1px;">Start</button>
+              <button class="button-secondary-large-muted ml3" id="start-blank" style="display: none; padding: 0 36px; margin: 10px 1px 10px 1px;">Start</button>
+            </div>
+            <div id="startfalse" style="display: none;">
+              <p style="margin: 10px 1px 10px 1px;"></p>
+            </div>
+          </div>
+          <div id="view-subscription-button"  style="height: 100%; margin: 25px 5px 5px 5px; border-top: 2px solid black; padding-top: 10px;">
+            <button class="button-primary-large ml3" style="padding: 0 6px; margin: 20px 1px 10px 1px; width: 100%;">View Subscription</button>
+          </div>
+          <div id="freeversion" style="height: 100%; margin: 3px 5px 3px 5px; border-top: 2px solid black; padding-top: 10px;">
+            <p><span id="dailyactions"></span> free daily actions used</p>
+            <p>Upgrade to get UNLIMITED</p>
+            <button class="button-primary-large ml3" id="upgrade" style="padding: 0 6px; margin: 5px 1px 0px 1px; width: 100%;">Upgrade</button>
+          </div>
+          <div id="support" style="margin: 5px 5px 5px 5px;">
+            <p style="font-size: 12px;">Support: <a href="mailto:support@boostextensions.freshdesk.com">support@boostextensions.freshdesk.com</a></p>
+          </div>
+        </section>
+      </div>
+      <div id="progress-tab" class="modal-content-wrapper" style="padding: 5px 5px 1px 5px; display: none;">
+        <section class="modal">
+          <div style="height: 100%; margin: 5px;">
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="padding: 5px 0px; margin-bottom: 10px;">Progress</h2>
+            <div id="myProgress">
+              <div id="myBar">
+                <p id="progressStats"></p>
+              </div>
+            </div>
+            <button class="button-primary-large ml3" id="stop" style="padding: 0 36px; margin: 30px 1px 10px 1px;">Stop</button>
+            <button class="button-secondary-large-muted ml3" id="return" style="display: none; padding: 0 36px; margin: 30px 1px 10px 1px;">Return</button>
+          </div>
+        </section>
+      </div>
+      <div id="upgrade-tab" class="modal-content-wrapper" style="padding: 5px 5px 1px 5px; display: none;">
+        <section class="modal">
+          <div style="height: 100%; margin: 5px;">
+            <button class="button-secondary-large-muted ml3" id="upgrade-button" style="padding: 0 6px; margin: 0px 1px 10px 1px; width: 75px; height: 30px; line-height: 0px;">Back</button>
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="font-size: 18px; border-bottom: none; border-top: 1px rgba(0,0,0,.15) solid;"><b>Subscription status:</b> <span id="current-status">inactive</span></h2>
+            <h2 class="Sans-21px-black-85% pv3" id="ember-modal-description" style="margin-bottom: 10px; font-size: 18px; "><b>Email:</b> <span id="current-email">none</span></h2>
+            <div id="upgrade-options">
+                <button class="button-primary-large ml3" id="purchase-upgrade-button" style="padding: 0 6px; margin: 10px 0px 10px 0px; width: 100%;">Purchase Upgrade</button>
+                <p id="ember-modal-label"><label for="custom-message"><b>Already purchased a subscription?</b> Enter your email below:</label></p>
+                <div class="ph4" style="margin: 10px 0px;">
+                   <input name="email" id="email" class="medium-input ember-checkbox ember-view" type="text" style="width: 180px; height: 30px; display: inline-block; vertical-align: middle;">
+                   <button class="button-primary-large ml3" id="login-button" style="padding: 0px; width: 80px; height: 30px; line-height: 0px;">Login</button>
+                </div>
+                <p id="activated-error" style="color: #e61717; font-weight: 500; text-align: center; display: none;">No active subscriptions found for that email</p>
+                <p id="logout-success" style="color: #278c48; font-weight: 500; text-align: center; display: none;">Successfully logged out!</p>
+            </div>
+            <div id="active-options">
+                <button class="button-primary-large ml3" id="manage-subscription-button" style="padding: 0 6px; margin: 10px 0px 10px 0px; width: 100%;">Manage Subscription</button>
+                <p id="manage-subscription-success" style="color: #278c48; font-weight: 500; text-align: center; display: none;">An email has been sent to you containing the link to manage your subscription (check spam if not found)</p>
+                <p id="manage-subscription-error" style="color: #278c48; font-weight: 500; text-align: center; display: none;">There was an error sending processing that request</p>
+                <button class="button-primary-large ml3" id="logout-button" style="padding: 0 6px; margin: 10px 0px 10px 0px; width: 100%;">Logout</button>
+                <p id="activated-success" style="color: #278c48; font-weight: 500; text-align: center; display: none;">Subscription activated!</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="modal-wormhole-overlay"></div>
+  </div>
+  </body>
+</html>
