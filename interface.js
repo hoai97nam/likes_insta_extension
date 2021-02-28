@@ -40,11 +40,25 @@ var licenseKey = ["1a", "2b", "3c"];
 
 function signUpTime() {
     let d = new Date();
-    let day = d.getDate();
-    let month = d.getMonth();
-    let year = d.getFullYear();
+    return d.getTime();
+}
+/*check expire every client (key) */
+async function checkExpire() {
+    for (var i in licenseKey) {
+        var k = await storageGet(key);
+        if (k != "none") {
 
-    return year.toString() + month.toString() + day.toString();
+        }
+    }
+}
+async function expireDate(key) {
+    var now = new Date();
+    var bf = storageGet(key);
+    var t = now.getTime();
+    if ((t - bf) / (1000 * 3600 * 24) >= 30) {
+        licenseKey.remove(key);
+
+    }
 }
 var initSLot = async function () {
     for (var i in licenseKey) {
@@ -53,7 +67,7 @@ var initSLot = async function () {
 }
 
 async function CheckCliennt(key) {
-    if (key in licenseKey) {        
+    if (key in licenseKey) {
         if (storageGet(key) == 'none') {
             var time = signUpTime();
             await storageSet({ key: time });
