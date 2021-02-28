@@ -37,6 +37,7 @@ function getFullTimestamp() {
 
 /* addition for Duke version */
 var licenseKey = ["1a", "2b", "3c"];
+
 function signUpTime() {
     let d = new Date();
     let day = d.getDate();
@@ -45,12 +46,18 @@ function signUpTime() {
 
     return year.toString() + month.toString() + day.toString();
 }
-async function CheckCliennt(key) {
-    if (key in licenseKey) {
-        // await storageSet();\
-        var time = signUpTime();
-        
+var initSLot = async function () {
+    for (var i in licenseKey) {
+        await storageSet({ i: 'none' });
+    }
+}
 
+async function CheckCliennt(key) {
+    if (key in licenseKey) {        
+        if (storageGet(key) == 'none') {
+            var time = signUpTime();
+            await storageSet({ key: time });
+        }
     }
 }
 function getDateDMY() {
@@ -244,26 +251,27 @@ var continueBackground = function () {
 
 // returns null or email
 async function getSubscriptionStatus(email) {
-    const init = {
-        method: 'GET',
-        async: true,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        'contentType': 'json'
-    };
+    // const init = {
+    //     method: 'GET',
+    //     async: true,
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     'contentType': 'json'
+    // };
 
-    const response = await fetch('https://boostextensions.com/donelikes/emailverify.php?email=' + email, init);
-    const data = await response.json();
+    // const response = await fetch('https://boostextensions.com/donelikes/emailverify.php?email=' + email, init);
+    // const data = await response.json();
 
-    return data.status;
+    // return data.status;
 }
 
 async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        subscriptionStatus = await getSubscriptionStatus(email);
+        // subscriptionStatus = await getSubscriptionStatus(email);
+        subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
 
@@ -296,19 +304,19 @@ async function checkSubscriptionStatus() {
 }
 
 async function sendManageSubEmail(email) {
-    const init = {
-        method: 'GET',
-        async: true,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        'contentType': 'json'
-    };
+    // const init = {
+    //     method: 'GET',
+    //     async: true,
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     'contentType': 'json'
+    // };
 
-    const response = await fetch('https://boostextensions.com/donelikes/sendmanagesubemail.php?email=' + email, init);
-    const data = await response.json();
+    // const response = await fetch('https://boostextensions.com/donelikes/sendmanagesubemail.php?email=' + email, init);
+    // const data = await response.json();
 
-    return data.status;
+    // return data.status;
 }
 
 // on DOM ready load templates and add event listeners to bottom right buttons
@@ -326,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('upgrade').addEventListener('click', function () { document.getElementById('upgrade-tab').style.display = 'block'; document.getElementById('automation-tab').style.display = 'none'; });
     document.getElementById('upgrade-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'block'; document.getElementById('upgrade-tab').style.display = 'none'; checkSubscriptionStatus(); actionsLimit(); });
     document.getElementById('view-subscription-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'none'; document.getElementById('upgrade-tab').style.display = 'block'; });
-    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://boostextensions.com/donelikes/paymentredirect.html' }); });
+    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://www.paypal.com/webapps/hermes?token=9BJ38157VP602613U&useraction=commit' }); });
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
@@ -387,9 +395,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (email.length > 0) {
             subscriptionStatus = await getSubscriptionStatus(email);
+            subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
-                sendEmail = await sendManageSubEmail(email);
+                // sendEmail = await sendManageSubEmail(email);
+                sendEmail = "success";
 
                 if (sendEmail == "success") {
                     document.getElementById('manage-subscription-success').style.display = 'block';
