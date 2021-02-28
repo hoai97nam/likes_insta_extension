@@ -56,8 +56,7 @@ async function expireDate(key) {
     var bf = storageGet(key);
     var t = now.getTime();
     if ((t - bf) / (1000 * 3600 * 24) >= 30) {
-        licenseKey.remove(key);
-
+        licenseKey.filter(x => x == key);
     }
 }
 var initSLot = async function () {
@@ -66,7 +65,7 @@ var initSLot = async function () {
     }
 }
 
-async function CheckCliennt(key) {
+async function CheckClient(key) {
     if (key in licenseKey) {
         if (storageGet(key) == 'none') {
             var time = signUpTime();
@@ -278,14 +277,18 @@ async function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
+    if (email in licenseKey) {
+        return "active";
+    }
+    return "inactive";
 }
 
 async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        // subscriptionStatus = await getSubscriptionStatus(email);
-        subscriptionStatus = "active";
+        subscriptionStatus = await getSubscriptionStatus(email);
+        // subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
 
@@ -331,6 +334,13 @@ async function sendManageSubEmail(email) {
     // const data = await response.json();
 
     // return data.status;
+    for (var x in licenseKey) {
+        if (await storageGet(x) == 'none') {
+            await storageSet({ x: signUpTime.toString() });
+            return "success";
+        }
+    }
+    return "nope";
 }
 
 // on DOM ready load templates and add event listeners to bottom right buttons
