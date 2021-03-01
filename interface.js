@@ -263,7 +263,7 @@ var continueBackground = function () {
 }
 
 // returns null or email
- function getSubscriptionStatus(email) {
+  function getSubscriptionStatus(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -287,7 +287,7 @@ async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        subscriptionStatus =  getSubscriptionStatus(email);
+        subscriptionStatus =   getSubscriptionStatus(email);
         // subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -334,9 +334,11 @@ async function sendManageSubEmail(email) {
     // const data = await response.json();
 
     // return data.status;
-    for (var x in licenseKey) {
-        if (await storageGet(x) == 'none') {
-            await storageSet({ x: signUpTime.toString() });
+    for (var i=0;i< licenseKey.length;i++) {
+        var j = licenseKey[i];
+        var cp = await storageGet(j);
+        if (await storageGet(j) == 'none') {
+            await storageSet({ j: signUpTime.toString() });
             return "success";
         }
     }
@@ -422,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
             subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
-                // sendEmail = await sendManageSubEmail(email);
+                sendEmail = await sendManageSubEmail(email);
                 sendEmail = "success";
 
                 if (sendEmail == "success") {
