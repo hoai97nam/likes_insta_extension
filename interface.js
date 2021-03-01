@@ -263,7 +263,7 @@ var continueBackground = function () {
 }
 
 // returns null or email
-async function getSubscriptionStatus(email) {
+ function getSubscriptionStatus(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -277,8 +277,8 @@ async function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
-    if (email in licenseKey) {
-        return "active";
+    for (var i=0;i,licenseKey.length;i++) {
+        if(email==licenseKey[i]) return "active";
     }
     return "inactive";
 }
@@ -287,7 +287,7 @@ async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        subscriptionStatus = await getSubscriptionStatus(email);
+        subscriptionStatus =  getSubscriptionStatus(email);
         // subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
-        subscriptionStatus = await getSubscriptionStatus(email);
+        subscriptionStatus =  getSubscriptionStatus(email);
 
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
         email = await storageGet('email');
 
         if (email.length > 0) {
-            subscriptionStatus = await getSubscriptionStatus(email);
+            subscriptionStatus =  getSubscriptionStatus(email);
             subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
