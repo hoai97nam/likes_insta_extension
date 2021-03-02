@@ -263,7 +263,7 @@ var continueBackground = function () {
 }
 
 // returns null or email
-  function getSubscriptionStatus(email) {
+function getSubscriptionStatus(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -277,8 +277,10 @@ var continueBackground = function () {
     // const data = await response.json();
 
     // return data.status;
-    for (var i=0;i,licenseKey.length;i++) {
-        if(email==licenseKey[i]) return "active";
+    for (var i = 0; i< licenseKey.length; i++) {
+        if (email == licenseKey[i]) {
+            return "active";
+        }
     }
     return "inactive";
 }
@@ -287,7 +289,7 @@ async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        subscriptionStatus =   getSubscriptionStatus(email);
+        subscriptionStatus = getSubscriptionStatus(email);
         // subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -334,7 +336,7 @@ async function sendManageSubEmail(email) {
     // const data = await response.json();
 
     // return data.status;
-    for (var i=0;i< licenseKey.length;i++) {
+    for (var i = 0; i < licenseKey.length; i++) {
         var j = licenseKey[i];
         var cp = await storageGet(j);
         if (await storageGet(j) == 'none') {
@@ -364,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
-        subscriptionStatus =  getSubscriptionStatus(email);
+        subscriptionStatus = getSubscriptionStatus(email);
 
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -420,11 +422,11 @@ document.addEventListener('DOMContentLoaded', function () {
         email = await storageGet('email');
 
         if (email.length > 0) {
-            subscriptionStatus =  getSubscriptionStatus(email);
+            subscriptionStatus = getSubscriptionStatus(email);
             subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
-                sendEmail = await sendManageSubEmail(email);
+                // sendEmail = await sendManageSubEmail(email);
                 sendEmail = "success";
 
                 if (sendEmail == "success") {
