@@ -42,6 +42,10 @@ function signUpTime() {
     let d = new Date();
     return d.getTime();
 }
+function signUpTime1() {
+    let d = new Date();
+    return d.getMinutes();
+}
 /*check expire every client (key) */
 async function checkExpire() {
     for (var i = 0; i < licenseKey.length; i++) {
