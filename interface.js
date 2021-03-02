@@ -44,8 +44,8 @@ function signUpTime() {
 }
 /*check expire every client (key) */
 async function checkExpire() {
-    for (var i in licenseKey) {
-        var k = await storageGet(key);
+    for (var i = 0; i < licenseKey.length; i++) {
+        var k = await storageGet(licenseKey[i]);
         if (k != "none") {
 
         }
@@ -277,7 +277,7 @@ function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
-    for (var i = 0; i< licenseKey.length; i++) {
+    for (var i = 0; i < licenseKey.length; i++) {
         if (email == licenseKey[i]) {
             return "active";
         }
