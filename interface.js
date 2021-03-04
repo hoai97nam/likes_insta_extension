@@ -37,23 +37,39 @@ function getFullTimestamp() {
 
 /* addition for Duke version */
 var licenseKey = ["1a", "2b", "3c"];
+var users = {
+    '1a': {
+        'signupDate': "",
+        'expireDate': ""
+    },
+    '2b': {
+        'signupDate': "",
+        'expireDate': ""
+    },
+    '3c': {
+        'signupDate': "",
+        'expireDate': ""
+    },
+}
 
 function signUpTime() {
     let d = new Date();
     return d.getTime();
 }
-function signUpTime1() {
+function signUpTimeMin() {
     let d = new Date();
     return d.getMinutes();
 }
 /*check expire every client (key) */
-async function checkExpire() {
-    for (var i = 0; i < licenseKey.length; i++) {
-        var k = await storageGet(licenseKey[i]);
-        if (k != "none") {
+var checkExpire = async function () {
+    var currentAccount = await storageGet(email);
+    var a = users[currentAccount].expireDate;
+    var b = users[currentAccount].signupDate;
+    if (a - b <= 0) {
 
-        }
+        return false;
     }
+    return true;
 }
 async function expireDate(key) {
     var now = new Date();
@@ -250,15 +266,29 @@ var isStartPossible = function () {
     }
 }
 
-
-
 // send message to background page to pause
 var pauseBackground = function () {
     chrome.runtime.sendMessage({ "message": "pause" });
     window.close();
 }
 
+var testAutoLogout = async function () {
+    console.log('test start button and log fucking out');
+    await storageSet({ 'email': null });
+    await storageSet({ 'subscriptionstatus': "inactive" });
 
+    document.getElementById('upgrade-options').style.display = 'block';
+    document.getElementById('active-options').style.display = 'none';
+
+    document.getElementById('current-email').textContent = "not set";
+    document.getElementById('current-status').textContent = "inactive";
+
+    document.getElementById('logout-success').style.display = 'block';
+
+    document.getElementById('freeversion').style.display = 'block';
+    document.getElementById('view-subscription-button').style.display = 'none';
+    actionsLimit();
+}
 
 // send message to background page to continue
 var continueBackground = function () {
@@ -360,7 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setTimeout(function () { isStartPossible(); }, 200);
     document.getElementById('list').addEventListener('input', isStartPossible);
-    document.getElementById('start').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection(); });//window.close(); 
+    document.getElementById('start').addEventListener('click', function () {
+        // await checkExpire();      
+        testAutoLogout();
+        chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
+    });//window.close(); 
     document.getElementById('stop').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "stop" }); actionsLimit(); document.querySelector('li[tab="automation-tab"]').click() });
     document.getElementById('return').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "stop" }); actionsLimit(); document.querySelector('li[tab="automation-tab"]').click() });
     document.getElementById('upgrade').addEventListener('click', function () { document.getElementById('upgrade-tab').style.display = 'block'; document.getElementById('automation-tab').style.display = 'none'; });
@@ -374,6 +408,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
+        // sign up  user
+        users[email].signupDate = signUpTimeMin();
+        users[email].expireDate = signUpTimeMin() + 1;
 
         if (subscriptionStatus == "active") {
             document.getElementById('upgrade-options').style.display = 'none';
