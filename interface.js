@@ -38,16 +38,16 @@ function getFullTimestamp() {
 /* addition for Duke version */
 var licenseKey = ["1a", "2b", "3c"];
 var users = {
-    '1a': {
-        'signupDate': "",
-        'expireDate': ""
-    },
+    // '1a': {
+    //     'status': "",
+    //     'expireDate': ""
+    // },
     '2b': {
-        'signupDate': "",
+        'status': "",
         'expireDate': ""
     },
     '3c': {
-        'signupDate': "",
+        'status': "",
         'expireDate': ""
     },
 }
@@ -64,12 +64,12 @@ function signUpTimeMin() {
 var checkExpire = async function () {
     var currentAccount = await storageGet(email);
     var a = users[currentAccount].expireDate;
-    var b = users[currentAccount].signupDate;
-    if (a - b <= 0) {
+    // var b = users[currentAccount].signupDate;
+    // if (a - b <= 0) {
 
-        return false;
-    }
-    return true;
+    //     return false;
+    // }
+    return false;
 }
 async function expireDate(key) {
     var now = new Date();
@@ -229,7 +229,7 @@ var actionsLimit = async function () {
     if (subscriptionStatus == "active") {
         var actions = 0;
     } else {
-        var actions = 10;
+        var actions = 2;
     }
 
     settings['actionsLimit'] = actions;
@@ -311,10 +311,8 @@ function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
-    for (var i = 0; i < licenseKey.length; i++) {
-        if (email == licenseKey[i]) {
-            return "active";
-        }
+    if (users[email] != undefined){
+        return "active";
     }
     return "inactive";
 }
@@ -356,7 +354,7 @@ async function checkSubscriptionStatus() {
     }
 }
 
-async function sendManageSubEmail(email) {
+function sendManageSubEmail(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -370,13 +368,8 @@ async function sendManageSubEmail(email) {
     // const data = await response.json();
 
     // return data.status;
-    for (var i = 0; i < licenseKey.length; i++) {
-        var j = licenseKey[i];
-        var cp = await storageGet(j);
-        if (await storageGet(j) == 'none') {
-            await storageSet({ j: signUpTime.toString() });
-            return "success";
-        }
+    if(users[email]!=undefined){
+        return "success";
     }
     return "nope";
 }
@@ -409,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
         // sign up  user
-        users[email].signupDate = signUpTimeMin();
+      
         users[email].expireDate = signUpTimeMin() + 1;
 
         if (subscriptionStatus == "active") {
@@ -467,8 +460,8 @@ document.addEventListener('DOMContentLoaded', function () {
             subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
-                // sendEmail = await sendManageSubEmail(email);
-                sendEmail = "success";
+                sendEmail = sendManageSubEmail(email);
+                // sendEmail = "success";
 
                 if (sendEmail == "success") {
                     document.getElementById('manage-subscription-success').style.display = 'block';
