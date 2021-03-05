@@ -79,11 +79,6 @@ async function expireDate(key) {
         licenseKey.filter(x => x == key);
     }
 }
-var initSLot = async function () {
-    for (var i in licenseKey) {
-        await storageSet({ i: 'none' });
-    }
-}
 
 async function CheckClient(key) {
     if (key in licenseKey) {
@@ -311,7 +306,7 @@ function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
-    if (users[email] != undefined){
+    if (email in users){
         return "active";
     }
     return "inactive";
@@ -402,10 +397,10 @@ document.addEventListener('DOMContentLoaded', function () {
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
         // sign up  user
-      
-        users[email].expireDate = signUpTimeMin() + 1;
-
+    
         if (subscriptionStatus == "active") {
+            users[email].expireDate = signUpTimeMin() + 1;
+            
             document.getElementById('upgrade-options').style.display = 'none';
             document.getElementById('active-options').style.display = 'block';
 
