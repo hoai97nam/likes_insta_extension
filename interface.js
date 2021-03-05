@@ -81,12 +81,7 @@ async function expireDate(key) {
 }
 
 async function CheckClient(key) {
-    if (key in licenseKey) {
-        if (storageGet(key) == 'none') {
-            var time = signUpTime();
-            await storageSet({ key: time });
-        }
-    }
+    
 }
 function getDateDMY() {
     var d = new Date();
@@ -400,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         if (subscriptionStatus == "active") {
             users[email].expireDate = signUpTimeMin() + 1;
-            
+
             document.getElementById('upgrade-options').style.display = 'none';
             document.getElementById('active-options').style.display = 'block';
 
