@@ -9,7 +9,20 @@ var settings 	= {};
 var progress 	= {current: 0, total: 0};
 var list 		= [];
 
-
+var usrs = {
+    '1a': {
+        // 'status': "",
+        'expireDate': ""
+    },
+    '2b': {
+        // 'status': "",
+        'expireDate': ""
+    },
+    '3c': {
+        // 'status': "",
+        'expireDate': ""
+    },
+}
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if(request.message == 'activate_icon')
@@ -71,7 +84,6 @@ async function executeScript(selector, tab) {
 }
 
 
-
 async function getActiveTabId() {
 	return new Promise((resolve, reject) => {
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -79,7 +91,6 @@ async function getActiveTabId() {
 	    });
 	});
 }
-
 
 
 async function storageGet(item, returnAsArray) {
@@ -96,7 +107,6 @@ async function storageGet(item, returnAsArray) {
 }
 
 
-
 async function storageSet(data) {
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.set(data, function() {
@@ -104,7 +114,6 @@ async function storageSet(data) {
 	    });
 	});
 }
-
 
 
 async function waitOneSecond() {
@@ -191,7 +200,6 @@ async function likeImage(url) {
 }
 
 
-
 async function automation() {
 	running 	= true;
 	activeTab 	= await getActiveTabId();
@@ -222,3 +230,18 @@ async function automation() {
 
 	showNotification('Automation ended');
 }
+async function createDb(){
+	var remain = await storageGet('usr');
+	for(const element in remain){
+		if(remain[element].expireDate != "" && parseInt(remain[element].expireDate) - signUpTimeMin() >0){
+			// console.log('result: '+element+' '+ element.expireDate);
+			usrs[element].expireDate=remain[element].expireDate;
+		}
+	}
+	await storageSet({'usr':usrs});
+}
+function signUpTimeMin() {
+    let d = new Date();
+    return d.getMinutes();
+}
+createDb();
