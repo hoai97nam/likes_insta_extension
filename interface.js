@@ -100,7 +100,7 @@ async function CheckClient(key) {
 var firstRegister = async function (accName) {
     var status = await storageGet('usr');
     if (status[accName].expireDate == "") {
-        status[accName].expireDate = signUpTimeMin() + 3;
+        status[accName].expireDate = signUpTimeMin() + 1;
         await storageSet({ 'usr': status });
     }
 
