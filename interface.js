@@ -76,9 +76,12 @@ function testExpired(key) {
 }
 async function testExpired1(key) {
     var status = await storageGet('usr');
-    var comp = status[key].expireDate;
-    if (parseInt(comp)-signUpTimeMin() > 0)
-        return false;
+    if (key in status) {
+        var comp = status[key].expireDate;
+        if (parseInt(comp) - signUpTimeMin() > 0) {
+            return false;
+        }
+    }
     return true;
 }
 function expireDate(key) {
@@ -100,7 +103,7 @@ async function CheckClient(key) {
 var firstRegister = async function (accName) {
     var status = await storageGet('usr');
     if (status[accName].expireDate == "") {
-        status[accName].expireDate = signUpTimeMin() + 1;
+        status[accName].expireDate = signUpTimeMin();
         await storageSet({ 'usr': status });
     }
 
@@ -213,7 +216,7 @@ var saveAutomationSettings = async function () {
     settings[setting.id] = (setting.type == 'checkbox' ? setting.checked : setting.value);
 
     await storageSet({ 'settings': settings });
-    
+
 }
 
 
@@ -388,9 +391,6 @@ async function sendManageSubEmail(email) {
     if (email in usr) {
         return "success";
     }
-    // if (users[email] != undefined) {
-    //     return "success";
-    // }
     return "nope";
 }
 
@@ -405,22 +405,38 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('list').addEventListener('input', isStartPossible);
     document.getElementById('start').addEventListener('click', async function () {
         var status = await storageGet('usr');
+        var stt = await storageGet('settings')
         if (email in status) {
             var testExpired = await testExpired1(email);
             if (testExpired) {
-                await storageRm(email);
+                // await storageRm(email);
                 alert('you fucking log out');
                 testAutoLogout();
-                window.close();
+                // continueBackground();
+                // tabSelection();
             }
         }
+        if (!(email in status) && parseInt(stt[actionsLimit]) != 0) {
+            chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
+        }
 
-        chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
     });//window.close(); 
     document.getElementById('stop').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "stop" }); actionsLimit(); document.querySelector('li[tab="automation-tab"]').click() });
     document.getElementById('return').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "stop" }); actionsLimit(); document.querySelector('li[tab="automation-tab"]').click() });
     document.getElementById('upgrade').addEventListener('click', function () { document.getElementById('upgrade-tab').style.display = 'block'; document.getElementById('automation-tab').style.display = 'none'; });
-    document.getElementById('upgrade-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'block'; document.getElementById('upgrade-tab').style.display = 'none'; checkSubscriptionStatus(); actionsLimit(); });
+    document.getElementById('upgrade-button').addEventListener('click', async function () {
+        var status = await storageGet('usr');
+
+        if (testExpired1(email) && email in status) {
+            alert('closing');
+            chrome.runtime.reload();
+        }
+        document.getElementById('automation-tab').style.display = 'block';
+        document.getElementById('upgrade-tab').style.display = 'none';
+        checkSubscriptionStatus();
+        actionsLimit();
+        // chrome.runtime.reload();
+    });
     document.getElementById('view-subscription-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'none'; document.getElementById('upgrade-tab').style.display = 'block'; });
     document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://www.paypal.com/webapps/hermes?token=9BJ38157VP602613U&useraction=commit' }); });
 
@@ -487,11 +503,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (email.length > 0) {
             subscriptionStatus = await getSubscriptionStatus(email);
-            subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
                 sendEmail = sendManageSubEmail(email);
-                // sendEmail = "success";
 
                 if (sendEmail == "success") {
                     document.getElementById('manage-subscription-success').style.display = 'block';
