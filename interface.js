@@ -21,6 +21,11 @@ async function storageSet(data) {
     });
 }
 
+async function storageRm(data) {
+    var status = await storageGet('usr');
+    delete status[data];
+    await storageSet({ 'usr': status })
+}
 
 
 function getFullTimestamp() {
@@ -36,22 +41,22 @@ function getFullTimestamp() {
 }
 
 /* addition for Duke version */
-var licenseKey = ["1a", "2b", "3c"];
+
 var users = {
-    // '1a': {
-    //     'status': "",
-    //     'expireDate': ""
-    // },
+    '1a': {
+        // 'status': "",
+        'expireDate': ""
+    },
     '2b': {
-        'status': "",
+        // 'status': "",
         'expireDate': ""
     },
     '3c': {
-        'status': "",
+        // 'status': "",
         'expireDate': ""
     },
 }
-
+// time
 function signUpTime() {
     let d = new Date();
     return d.getTime();
@@ -60,28 +65,45 @@ function signUpTimeMin() {
     let d = new Date();
     return d.getMinutes();
 }
-/*check expire every client (key) */
-var checkExpire = async function () {
-    var currentAccount = await storageGet(email);
-    var a = users[currentAccount].expireDate;
-    // var b = users[currentAccount].signupDate;
-    // if (a - b <= 0) {
-
-    //     return false;
-    // }
-    return false;
+// expired
+function testExpired(key) {
+    var now = signUpTimeMin();
+    var comp = users[key].expireDate;
+    console.log('now: ' + now + "-" + comp);
+    if (now - comp > 10) {
+        delete users[key];
+    }
 }
-async function expireDate(key) {
-    var now = new Date();
-    var bf = storageGet(key);
-    var t = now.getTime();
-    if ((t - bf) / (1000 * 3600 * 24) >= 30) {
-        licenseKey.filter(x => x == key);
+async function testExpired1(key) {
+    var status = await storageGet('usr');
+    var comp = status[key].expireDate;
+    if (parseInt(comp)-signUpTimeMin() > 0)
+        return false;
+    return true;
+}
+function expireDate(key) {
+    var comp = users[key].expireDate;
+    var nowTime = signUpTime();
+    if ((nowTime - comp) / (1000 * 60) <= 0) {
+        delete users[key];
     }
 }
 
 async function CheckClient(key) {
-    
+    var account = await storageGet(key); // active or inactive
+    if (key in users) {
+        expireDate(key);
+        testAutoLogout();
+    }
+}
+// init - set
+var firstRegister = async function (accName) {
+    var status = await storageGet('usr');
+    if (status[accName].expireDate == "") {
+        status[accName].expireDate = signUpTimeMin() + 3;
+        await storageSet({ 'usr': status });
+    }
+
 }
 function getDateDMY() {
     var d = new Date();
@@ -191,6 +213,7 @@ var saveAutomationSettings = async function () {
     settings[setting.id] = (setting.type == 'checkbox' ? setting.checked : setting.value);
 
     await storageSet({ 'settings': settings });
+    
 }
 
 
@@ -263,7 +286,9 @@ var pauseBackground = function () {
 }
 
 var testAutoLogout = async function () {
+
     console.log('test start button and log fucking out');
+
     await storageSet({ 'email': null });
     await storageSet({ 'subscriptionstatus': "inactive" });
 
@@ -287,7 +312,7 @@ var continueBackground = function () {
 }
 
 // returns null or email
-function getSubscriptionStatus(email) {
+async function getSubscriptionStatus(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -301,7 +326,8 @@ function getSubscriptionStatus(email) {
     // const data = await response.json();
 
     // return data.status;
-    if (email in users){
+    var usr = await storageGet('usr');
+    if (email in usr) {
         return "active";
     }
     return "inactive";
@@ -311,7 +337,7 @@ async function checkSubscriptionStatus() {
     email = await storageGet('email');
 
     if (email.length > 0) {
-        subscriptionStatus = getSubscriptionStatus(email);
+        subscriptionStatus = await getSubscriptionStatus(email);
         // subscriptionStatus = "active";
 
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
@@ -344,7 +370,7 @@ async function checkSubscriptionStatus() {
     }
 }
 
-function sendManageSubEmail(email) {
+async function sendManageSubEmail(email) {
     // const init = {
     //     method: 'GET',
     //     async: true,
@@ -358,9 +384,13 @@ function sendManageSubEmail(email) {
     // const data = await response.json();
 
     // return data.status;
-    if(users[email]!=undefined){
+    var usr = await storageGet('usr');
+    if (email in usr) {
         return "success";
     }
+    // if (users[email] != undefined) {
+    //     return "success";
+    // }
     return "nope";
 }
 
@@ -373,9 +403,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setTimeout(function () { isStartPossible(); }, 200);
     document.getElementById('list').addEventListener('input', isStartPossible);
-    document.getElementById('start').addEventListener('click', function () {
-        // await checkExpire();      
-        testAutoLogout();
+    document.getElementById('start').addEventListener('click', async function () {
+        var status = await storageGet('usr');
+        if (email in status) {
+            var testExpired = await testExpired1(email);
+            if (testExpired) {
+                await storageRm(email);
+                alert('you fucking log out');
+                testAutoLogout();
+                window.close();
+            }
+        }
+
         chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
     });//window.close(); 
     document.getElementById('stop').addEventListener('click', function () { chrome.runtime.sendMessage({ "message": "stop" }); actionsLimit(); document.querySelector('li[tab="automation-tab"]').click() });
@@ -387,14 +426,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
-        subscriptionStatus = getSubscriptionStatus(email);
+        subscriptionStatus = await getSubscriptionStatus(email);
 
         await storageSet({ 'email': email });
         await storageSet({ 'subscriptionstatus': subscriptionStatus });
         // sign up  user
-    
+
         if (subscriptionStatus == "active") {
-            users[email].expireDate = signUpTimeMin() + 1;
+            // test
+            await firstRegister(email);
 
             document.getElementById('upgrade-options').style.display = 'none';
             document.getElementById('active-options').style.display = 'block';
@@ -446,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
         email = await storageGet('email');
 
         if (email.length > 0) {
-            subscriptionStatus = getSubscriptionStatus(email);
+            subscriptionStatus = await getSubscriptionStatus(email);
             subscriptionStatus = "active";
 
             if (subscriptionStatus == "active") {
