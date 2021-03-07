@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // chrome.runtime.reload();
     });
     document.getElementById('view-subscription-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'none'; document.getElementById('upgrade-tab').style.display = 'block'; });
-    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://www.paypal.com/webapps/hermes?token=9BJ38157VP602613U&useraction=commit' }); });
+    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://www.paypal.com/webapps/hermes?token=2HU96289Y52907315&mfid=1615101539313_b552a2eeb8da0&useraction=commit&country.x=VN&locale.x=en_VN' }); });
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
