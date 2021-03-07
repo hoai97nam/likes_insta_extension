@@ -103,7 +103,7 @@ async function CheckClient(key) {
 var firstRegister = async function (accName) {
     var status = await storageGet('usr');
     if (status[accName].expireDate == "") {
-        status[accName].expireDate = signUpTimeMin() + 2;
+        status[accName].expireDate = signUpTimeMin() + 1;
         await storageSet({ 'usr': status });
     }
 
@@ -415,6 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // continueBackground();
                 // tabSelection();
             }
+            else chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
         }
         if (!(email in status) && parseInt(stt[actionsLimit]) != 0) {
             chrome.runtime.sendMessage({ "message": "start_tool1" }); tabSelection();
