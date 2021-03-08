@@ -389,9 +389,13 @@ async function sendManageSubEmail(email) {
     // return data.status;
     var usr = await storageGet('usr');
     if (email in usr) {
-        return "success";
+        var comp = usr[email].expireDate;
+        if (parseInt(comp) - signUpTimeMin() > 0) {
+            return parseInt(comp) - signUpTimeMin();
+        }
     }
-    return "nope";
+    return 0;
+
 }
 
 // on DOM ready load templates and add event listeners to bottom right buttons
@@ -506,14 +510,16 @@ document.addEventListener('DOMContentLoaded', function () {
             subscriptionStatus = await getSubscriptionStatus(email);
 
             if (subscriptionStatus == "active") {
-                sendEmail = sendManageSubEmail(email);
+                sendEmail = await sendManageSubEmail(email);
 
-                if (sendEmail == "success") {
+                if (sendEmail != 0) {
                     document.getElementById('manage-subscription-success').style.display = 'block';
+                    document.getElementById('manage-subscription-success').innerHTML = 'time remain: ' + sendEmail + ' day(s)';
                     document.getElementById('manage-subscription-error').style.display = 'none';
                 } else {
                     document.getElementById('manage-subscription-success').style.display = 'none';
                     document.getElementById('manage-subscription-error').style.display = 'block';
+                    document.getElementById('manage-subscription-error').innerHTML = 'expired !';
                 }
             }
         }
