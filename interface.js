@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var testExpired = await testExpired1(email);
             if (testExpired) {
                 // await storageRm(email);
-                alert('you fucking log out');
+                alert('Your account might expire. Logging out ...');
                 testAutoLogout();
                 // continueBackground();
                 // tabSelection();
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var status = await storageGet('usr');
 
         if (testExpired1(email) && email in status) {
-            alert('closing');
+            alert('Please open Extension. Closing for updating');
             chrome.runtime.reload();
         }
         document.getElementById('automation-tab').style.display = 'block';
