@@ -75,10 +75,11 @@ function testExpired(key) {
     }
 }
 async function testExpired1(key) {
+
     var status = await storageGet('usr');
     if (key in status) {
         var comp = status[key].expireDate;
-        if (parseInt(comp) - signUpTimeMin() > 0) {
+        if ((parseInt(comp) - signUpTime()) / (1000 * 3600 * 24) > 0) {
             return false;
         }
     }
@@ -92,18 +93,18 @@ function expireDate(key) {
     }
 }
 
-async function CheckClient(key) {
-    var account = await storageGet(key); // active or inactive
-    if (key in users) {
-        expireDate(key);
-        testAutoLogout();
-    }
-}
+// async function CheckClient(key) {
+//     var account = await storageGet(key); // active or inactive
+//     if (key in users) {
+//         expireDate(key);
+//         testAutoLogout();
+//     }
+// }
 // init - set
 var firstRegister = async function (accName) {
     var status = await storageGet('usr');
     if (status[accName].expireDate == "") {
-        status[accName].expireDate = signUpTimeMin() + 1;
+        status[accName].expireDate = signUpTime() + (1000 * 3600 * 24 * 30);
         await storageSet({ 'usr': status });
     }
 
@@ -390,8 +391,8 @@ async function sendManageSubEmail(email) {
     var usr = await storageGet('usr');
     if (email in usr) {
         var comp = usr[email].expireDate;
-        if (parseInt(comp) - signUpTimeMin() > 0) {
-            return parseInt(comp) - signUpTimeMin();
+        if ((parseInt(comp) - signUpTime()) / (1000 * 3600 * 24) > 0) {
+            return (parseInt(comp) - signUpTime()) / (1000 * 3600 * 24);
         }
     }
     return 0;
@@ -433,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var status = await storageGet('usr');
 
         if (testExpired1(email) && email in status) {
-            alert('Please open Extension. Closing for updating');
+            alert('Please open Extension. Closing for updating ...');
             chrome.runtime.reload();
         }
         document.getElementById('automation-tab').style.display = 'block';
