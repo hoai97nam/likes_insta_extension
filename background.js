@@ -198,7 +198,38 @@ async function likeImage(url) {
 
 	await executeScript("[...document.querySelectorAll('[aria-label=\"Like\"]')].filter(x => !x.outerHTML.toLowerCase().includes('comment') && !x.outerHTML.toLowerCase().includes('height=\"12\"'))[0].parentNode.click()");
 }
-
+//comment Images
+function PostComment(c, b, e, d, f, l, k, g) {
+    mylog("PostComment start with coemment:" + g);
+    if (g.match("%username%") || g.match("%full_name%") || g.match("%firstname%")) GetOwner(c, b, e, d, f, l, k, g);
+    else {
+        tag = d.cat.split("#")[f].replace(" ", "");
+        if ("Yes" == IsAlreadySent(k, "Yes"))
+            return deleteBtn.innerHTML = "We have already posted on a picture belonging to same owner than: <a href='https://www.instagram.com/p/" + b + "/' target='blank'>" + b + "</a><div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><br><i>PS: you can navigate in other tabs same time (Total posted:" +
+                totalcomments + ")</i>", startschedule(e), !0;
+        mylog("PostComment(" + c + "," + b + ")");
+        d = new XMLHttpRequest;
+        d.onreadystatechange = function () {
+            if (4 == this.readyState && 500 == this.status)
+                alert("Server issue. Please try again in 1 hour or contact support if error is persisting");
+            else if (4 == this.readyState && 200 == this.status) try {
+                var h = JSON.parse(this.responseText);
+                mylog(this.responseText);
+                "ok" == h.status ? (totalcomments += 1, chrome.storage.local.set({ totalcomments: totalcomments }, function () { }), deleteBtn.innerHTML = "Comment posted on: <a href='https://www.instagram.com/p/" +
+                    b + "/' target='blank'>" + b + "</a><br>Current tag:" + tag + ", Page:" + l + " (Total posted:" + totalcomments + ")<div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><i>PS: you can navigate in other tabs same time</i>", startschedule(e), Record(b)) : deleteBtn.innerHTML = "Error to post on: https://www.instagram.com/p/" + b + "/"
+            } catch (n) { mylog(n) }
+        };
+        csrftoken = readCookie("csrftoken");
+        mylog("csrftoken=>" + csrftoken);
+        d.open("POST", "https://www.instagram.com/web/comments/" + c + "/add/", !0);
+        d.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        d.setRequestHeader("x-requested-with", "XMLHttpRequest");
+        d.setRequestHeader("x-csrftoken", csrftoken);
+        d.setRequestHeader("x-ig-app-id", instagramWebDesktopFBAppId);
+        d.setRequestHeader("x-instagram-ajax", "1");
+        d.send("comment_text=" + g)
+    }
+}
 
 async function automation() {
 	running 	= true;
