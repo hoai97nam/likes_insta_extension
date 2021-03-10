@@ -246,7 +246,7 @@ var actionsLimit = async function () {
     if (subscriptionStatus == "active") {
         var actions = 0;
     } else {
-        var actions = 2;
+        var actions = 10;
     }
 
     settings['actionsLimit'] = actions;
