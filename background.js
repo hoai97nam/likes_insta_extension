@@ -200,27 +200,28 @@ async function likeImage(url) {
 }
 //comment Images
 var instagramWebDesktopFBAppId = "936619743392459";
-function PostComment(c, b, e, d, f, l, k, g) {//g , d, b, h, 
-	console.log("PostComment start with coemment:" + g);
-	if (g.match("%username%") || g.match("%full_name%") || g.match("%firstname%")) continue;//GetOwner(c, b, e, d, f, l, k, g);
-	else {
-		tag = d.cat.split("#")[f].replace(" ", "");
-		if ("Yes" == IsAlreadySent(k, "Yes"))
-			return deleteBtn.innerHTML = "We have already posted on a picture belonging to same owner than: <a href='https://www.instagram.com/p/" + b + "/' target='blank'>" + b + "</a><div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><br><i>PS: you can navigate in other tabs same time (Total posted:" +
-				totalcomments + ")</i>", startschedule(e), !0;
-		console.log("PostComment(" + c + "," + b + ")");
-		d = new XMLHttpRequest;
-		d.onreadystatechange = function () {
-			if (4 == this.readyState && 500 == this.status)
-				alert("Server issue. Please try again in 1 hour or contact support if error is persisting");
-			else if (4 == this.readyState && 200 == this.status)
-				try {
-					var h = JSON.parse(this.responseText);
-					console.log(this.responseText);
-					"ok" == h.status ? (totalcomments += 1, chrome.storage.local.set({ totalcomments: totalcomments }, function () { }), deleteBtn.innerHTML = "Comment posted on: <a href='https://www.instagram.com/p/" +
-						b + "/' target='blank'>" + b + "</a><br>Current tag:" + tag + ", Page:" + l + " (Total posted:" + totalcomments + ")<div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><i>PS: you can navigate in other tabs same time</i>", startschedule(e), Record(b)) : deleteBtn.innerHTML = "Error to post on: https://www.instagram.com/p/" + b + "/"
-				} catch (n) { console.log(n) }
-		};
+var c = 'CMJMabelkEl';
+function PostComment() {//g , d, b, h, 
+	// console.log("PostComment start with coemment:" + g);
+	// if (g.match("%username%") || g.match("%full_name%") || g.match("%firstname%")) GetOwner(c, b, e, d, f, l, k, g);
+	// else {
+	// tag = d.cat.split("#")[f].replace(" ", "");
+	// if ("Yes" == IsAlreadySent(k, "Yes"))
+	// 	return deleteBtn.innerHTML = "We have already posted on a picture belonging to same owner than: <a href='https://www.instagram.com/p/" + b + "/' target='blank'>" + b + "</a><div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><br><i>PS: you can navigate in other tabs same time (Total posted:" +
+	// 		totalcomments + ")</i>", startschedule(e), !0;
+	// console.log("PostComment(" + c + "," + b + ")");
+	const d = new XMLHttpRequest;
+	d.onreadystatechange = function () {
+		// 	if (4 == this.readyState && 500 == this.status)
+		// 		alert("Server issue. Please try again in 1 hour or contact support if error is persisting");
+		// 	else if (4 == this.readyState && 200 == this.status)
+		// 		try {
+		// 			var h = JSON.parse(this.responseText);
+		// 			console.log(this.responseText);
+		// 			"ok" == h.status ? (totalcomments += 1, chrome.storage.local.set({ totalcomments: totalcomments }, function () { }), deleteBtn.innerHTML = "Comment posted on: <a href='https://www.instagram.com/p/" +
+		// 				b + "/' target='blank'>" + b + "</a><br>Current tag:" + tag + ", Page:" + l + " (Total posted:" + totalcomments + ")<div id='countdown'>" + Math.floor(e / 1E3) + " secs</div><i>PS: you can navigate in other tabs same time</i>", startschedule(e), Record(b)) : deleteBtn.innerHTML = "Error to post on: https://www.instagram.com/p/" + b + "/"
+		// 		} catch (n) { console.log(n) }
+		// };
 		csrftoken = readCookie("csrftoken");
 		console.log("csrftoken=>" + csrftoken);
 		d.open("POST", "https://www.instagram.com/web/comments/" + c + "/add/", !0);
@@ -229,8 +230,28 @@ function PostComment(c, b, e, d, f, l, k, g) {//g , d, b, h,
 		d.setRequestHeader("x-csrftoken", csrftoken);
 		d.setRequestHeader("x-ig-app-id", instagramWebDesktopFBAppId);
 		d.setRequestHeader("x-instagram-ajax", "1");
-		d.send("comment_text=" + g)
+		d.send("comment_text=" + 'nice one')
 	}
+}
+function testXMLHttpRequest() {
+	const xhr = new XMLHttpRequest(),
+		method = "GET",
+		url = "https://developer.mozilla.org/";
+
+	xhr.open(method, url, true);
+	xhr.onreadystatechange = function () {
+		// In local files, status is 0 upon success in Mozilla Firefox
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			var status = xhr.status;
+			if (status === 0 || (status >= 200 && status < 400)) {
+				// The request has been completed successfully
+				console.log(xhr.responseText);
+			} else {
+				// Oh no! There has been an error with the request!
+			}
+		}
+	};
+	xhr.send();
 }
 
 async function automation() {
