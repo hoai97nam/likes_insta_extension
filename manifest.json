@@ -26,8 +26,6 @@
 		"storage",
 		"unlimitedStorage",
 		"https://*.instagram.com/*",
-		"http://*.instagram.com/*",
-		"https://boostextensions.com/autofollow/emailverify.php",
-		"https://boostextensions.com/autofollow/sendmanagesubemail.php"
+		"http://*.instagram.com/*"
 	]
 }
