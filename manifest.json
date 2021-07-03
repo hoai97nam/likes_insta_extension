@@ -4,7 +4,7 @@
 	"manifest_version": 2,
 	"name": "TELELIKE - Automatically Like for Instagram",
 	"description": "Automatically like Instagram posts in Instagram Pods/Engagement Groups",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"icons": {
 		"128": "icon_128.png",
 		"48": "icon_48.png",
