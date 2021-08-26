@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // chrome.runtime.reload();
     });
     document.getElementById('view-subscription-button').addEventListener('click', function () { document.getElementById('automation-tab').style.display = 'none'; document.getElementById('upgrade-tab').style.display = 'block'; });
-    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://sites.google.com/view/telelike/' }); });
+    document.getElementById('purchase-upgrade-button').addEventListener('click', function () { chrome.tabs.create({ url: 'https://extensiontelelike.com/?fbclid=IwAR1ZOCXjoGqNZTlstnXOhxHXeyqR68ZMjmYTBa7dQ36cOHrz3wW565-ufYU' }); });
 
     document.getElementById('login-button').addEventListener('click', async function () {
         email = document.getElementById('email').value;
