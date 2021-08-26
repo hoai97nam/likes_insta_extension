@@ -11,51 +11,129 @@ var list = [];
 
 var usrs = {
 	'1a': {
-		// 'status': "",
 		'expireDate': ""
 	},
 	'2b': {
-		// 'status': "",
 		'expireDate': ""
 	},
-	'KLJtde': {
-		// 'status': "",
+	'dnNyJf': {
 		'expireDate': ""
 	},
-	'KvyG1u': {
-		// 'status': "",
+	'0v57FH': {
 		'expireDate': ""
 	},
-	'y7KSZQ': {
-		// 'status': "",
+	'xbV34U': {
 		'expireDate': ""
 	},
-	'90sSU2': {
-		// 'status': "",
-		'expireDate': ""
-	}, 
-	'jCLWwz': {
-		// 'status': "",
+	'VCAoq2': {
 		'expireDate': ""
 	},
-	'fQRYvj': {
-		// 'status': "",
+	'4KCbsm': {
 		'expireDate': ""
 	},
-	'DVW0xC': {
-		// 'status': "",
-		'expireDate': ""
-	}, 
-	'RWm45P': {
-		// 'status': "",
+	'gM7aNq': {
 		'expireDate': ""
 	},
-	'0C2qIb': {
-		// 'status': "",
+	'exvusD': {
 		'expireDate': ""
 	},
-	'bTjFwg': {
-		// 'status': "",
+	'CN6xlY': {
+		'expireDate': ""
+	},
+	'uXh4bI': {
+		'expireDate': ""
+	},
+	'wafbiz': {
+		'expireDate': ""
+	},
+	'8xQkOC': {
+		'expireDate': ""
+	},
+	'7X6ELU': {
+		'expireDate': ""
+	},
+	'4hWAg4': {
+		'expireDate': ""
+	},
+	'lkeLts': {
+		'expireDate': ""
+	},
+	'C0sRAR': {
+		'expireDate': ""
+	},
+	'T31obt': {
+		'expireDate': ""
+	},
+	'NM52fz': {
+		'expireDate': ""
+	},
+	'WZKRzI': {
+		'expireDate': ""
+	},
+	'PHrK3w': {
+		'expireDate': ""
+	},
+	'OGSkjS': {
+		'expireDate': ""
+	},
+	'vtgHhM': {
+		'expireDate': ""
+	},
+	'wwMAAU': {
+		'expireDate': ""
+	},
+	'E43q3T': {
+		'expireDate': ""
+	},
+	'MT5zCR': {
+		'expireDate': ""
+	},
+	'iuHSHu': {
+		'expireDate': ""
+	},
+	'Lc2m13': {
+		'expireDate': ""
+	},
+	'OQrKnN': {
+		'expireDate': ""
+	},
+	'rwI4Ly': {
+		'expireDate': ""
+	},
+	'KKmLgc': {
+		'expireDate': ""
+	},
+	'HdQXmK': {
+		'expireDate': ""
+	},
+	'0v9Wvq': {
+		'expireDate': ""
+	},
+	'8JAU9M': {
+		'expireDate': ""
+	},
+	'd2zvsa': {
+		'expireDate': ""
+	},
+	'e8tBtL': {
+		'expireDate': ""
+	},
+	'Ae9GDM': {
+		'expireDate': ""
+	},
+	'QjM8Ar': {
+		'expireDate': ""
+	},
+	'MHljwX': {
+		'expireDate': ""
+	},
+	'bBuW4M': {
+		'expireDate': ""
+	},
+	'GuhpYm': {
+		'expireDate': ""
+	},
+	'ib53lt': {
 		'expireDate': ""
 	},
 
@@ -64,30 +142,30 @@ var usrs = {
 
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-		if (request.message == 'activate_icon')
-			chrome.pageAction.show(sender.tab.id);
-		if (request.message == 'pause')
-			pause = true;
-		if (request.message == 'continue')
-			pause = false;
-		if (request.message == 'stop')
-			running = false;
-		if (request.message == 'state')
-			sendResponse({ running: running });
-		if (request.message.indexOf('start_') != -1)
-			automation(request.message);
+	if (request.message == 'activate_icon')
+		chrome.pageAction.show(sender.tab.id);
+	if (request.message == 'pause')
+		pause = true;
+	if (request.message == 'continue')
+		pause = false;
+	if (request.message == 'stop')
+		running = false;
+	if (request.message == 'state')
+		sendResponse({ running: running });
+	if (request.message.indexOf('start_') != -1)
+		automation(request.message);
+});
+
+
+
+function showNotification(message) {
+	chrome.notifications.create({
+		type: 'basic',
+		iconUrl: 'icon.png',
+		title: 'Instagram Automation',
+		message: message,
+		priority: 0
 	});
-
-
-
-	function showNotification(message) {
-		chrome.notifications.create({
-			type: 'basic',
-			iconUrl: 'icon.png',
-			title: 'Instagram Automation',
-			message: message,
-			priority: 0
-		});
 }
 
 
