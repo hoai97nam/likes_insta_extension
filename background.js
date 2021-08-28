@@ -351,7 +351,6 @@ async function createDb() {
 	var remain = await storageGet('usr');
 	for (const element in remain) {
 		if (remain[element].expireDate != "") {
-			// console.log('result: '+element+' '+ element.expireDate);
 			usrs[element].expireDate = remain[element].expireDate;
 		}
 	}

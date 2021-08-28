@@ -75,7 +75,6 @@ function testExpired(key) {
     }
 }
 async function testExpired1(key) {
-
     var status = await storageGet('usr');
     if (key in status) {
         var comp = status[key].expireDate;
@@ -85,21 +84,7 @@ async function testExpired1(key) {
     }
     return true;
 }
-function expireDate(key) {
-    var comp = users[key].expireDate;
-    var nowTime = signUpTime();
-    if ((nowTime - comp) / (1000 * 60) <= 0) {
-        delete users[key];
-    }
-}
 
-// async function CheckClient(key) {
-//     var account = await storageGet(key); // active or inactive
-//     if (key in users) {
-//         expireDate(key);
-//         testAutoLogout();
-//     }
-// }
 // init - set
 var firstRegister = async function (accName) {
     var status = await storageGet('usr');
@@ -107,7 +92,6 @@ var firstRegister = async function (accName) {
         status[accName].expireDate = signUpTime() + (1000 * 3600 * 24 * 30);
         await storageSet({ 'usr': status });
     }
-
 }
 function getDateDMY() {
     var d = new Date();
@@ -317,19 +301,6 @@ var continueBackground = function () {
 
 // returns null or email
 async function getSubscriptionStatus(email) {
-    // const init = {
-    //     method: 'GET',
-    //     async: true,
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     'contentType': 'json'
-    // };
-
-    // const response = await fetch('https://boostextensions.com/donelikes/emailverify.php?email=' + email, init);
-    // const data = await response.json();
-
-    // return data.status;
     var usr = await storageGet('usr');
     if (email in usr) {
         return "active";
@@ -375,28 +346,21 @@ async function checkSubscriptionStatus() {
 }
 
 async function sendManageSubEmail(email) {
-    // const init = {
-    //     method: 'GET',
-    //     async: true,
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     'contentType': 'json'
-    // };
-
-    // const response = await fetch('https://boostextensions.com/donelikes/sendmanagesubemail.php?email=' + email, init);
-    // const data = await response.json();
-
-    // return data.status;
     var usr = await storageGet('usr');
     if (email in usr) {
         var comp = usr[email].expireDate;
-        if ((parseInt(comp) - signUpTime()) / (1000 * 3600 * 24) > 0) {
-            return (parseInt(comp) - signUpTime()) / (1000 * 3600 * 24);
-        }
+        var _remain = parseInt(comp) - signUpTime();
+        if (_remain > 0) {
+            var minutes = Math.floor((_remain / (1000 * 60)) % 60),
+                hours = Math.floor((_remain / (1000 * 60 * 60)) % 24),
+                days = Math.floor(_remain / (1000 * 60 * 60 * 24));
+
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+
+            return days + ' days ' + hours + ' hours ' + minutes + ' minutes';
     }
     return 0;
-
 }
 
 // on DOM ready load templates and add event listeners to bottom right buttons
